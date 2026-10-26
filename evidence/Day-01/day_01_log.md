@@ -61,12 +61,10 @@ Next time I will write the acceptance criteria while I write each story, and I w
 docs/day-01-requirements
 
 ## Pull request
-(Paste the PR link after you create it)
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/1
 
 ## Commit hash
-(Paste the output of: git log -1 --format=%H)
+eb467cdd9664e8be3812a1b440db26500508acfd
 
 ## Blockers / questions for supervisor
-- (Write only real blockers. Write "None" if there are none.)
-
-## End-of-day review answer
+- Question for review: Is it okay to use Jira for the backlog?
