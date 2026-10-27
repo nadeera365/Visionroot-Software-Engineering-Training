@@ -68,13 +68,13 @@ I was still learning how to translate requirements into an architecture and data
 Next time, I will review the MVP requirements before creating diagrams and make sure all design documents follow the same scope. I will also check the diagrams against the data model before submitting them.
 
 ## GitHub branch
-docs/day-02-
+docs/day-02-architecture
 
 ## Pull request
-https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/2
 
 ## Commit hash
-
+9a66cd516d5c5bf0c8af610002d8002e48582927
 
 ## Blockers / Questions for Supervisor
 
