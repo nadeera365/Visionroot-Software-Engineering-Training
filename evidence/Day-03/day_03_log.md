@@ -30,9 +30,6 @@ Objective: Make the project reproducible and establish a professional contributi
 - Cloned the repository into a new folder and followed the README.
 - Checked with git ls-files that no real .env file is committed.
 
-## Evidence links
-- (Add the repository tree screenshot only if the supervisor asks for it)
-
 ## Problem encountered
 - I was not familiar with TypeScript when setting up the backend and frontend.
 
