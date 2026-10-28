@@ -49,10 +49,10 @@ Objective: Make the project reproducible and establish a professional contributi
 chore/day-03-environment-setup
 
 ## Pull request
-
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/3
 
 ## Commit hash
-
+d7a0426a24bd4a02d5a1677256cfba2bc2b0176b
 
 ## Blockers / questions for supervisor
 - None
