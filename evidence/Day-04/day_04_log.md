@@ -51,10 +51,10 @@ Create a usable frontend with clear component boundaries and states.
 `feat/day-04-frontend-ui`
 
 ## Pull request
-
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/4
 
 ## Commit hash
-
+e81b46b07dd6311d30392ab2082ecf1e8622b3bc
 
 ## Blockers / questions for supervisor
 None, unless a real blocker needs to be reported.
