@@ -41,18 +41,48 @@ Built during the VisionRoot trainee software engineer program.
 
    The backend should print `Backend running on port 4000`.
 
-3. Run the frontend (in a new terminal)
+3. ## Frontend Setup
 
-   ```
+   ### Prerequisites
+   - Node.js
+   - npm
+   
+   ### Install dependencies
+   
+   ```bash
    cd frontend
    npm install
-   cp .env.example .env.local
+   ```
+   
+   ### Configure environment variables
+   
+   Create a local `.env.local` file using `.env.example` as a reference.
+   
+   On Windows PowerShell:
+   
+   ```powershell
+   Copy-Item .env.example .env.local
+   ```
+   
+   Make sure `NEXT_PUBLIC_API_URL` points to the correct local API URL. Set `NEXT_PUBLIC_USE_MOCK=true` if you want to use mock request data.
+   
+   Do not commit `.env.local` or real credentials.
+   
+   ### Run the frontend
+   
+   ```bash
    npm run dev
    ```
-
-   Open http://localhost:3000
-
-Edit the new `.env` files with your own values. Never commit real `.env` files.
+   
+   Open `http://localhost:3000` in your browser.
+   
+   ### Run checks
+   
+   ```bash
+   npx tsc --noEmit
+   npm run lint
+   npm run build
+```
 
 ## Scripts
 
