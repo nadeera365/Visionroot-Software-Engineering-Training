@@ -45,7 +45,7 @@ Create a usable frontend with clear component boundaries and states.
 - I learned the basics of Next.js by following the setup instructions and practising how to create pages, layouts, and reusable components.
 
 ## What I would improve
--I would improve the frontend accessibility and add automated tests for the request form and request list.
+- I would improve the frontend accessibility and add automated tests for the request form and request list.
 
 ## GitHub branch
 `feat/day-04-frontend-ui`
