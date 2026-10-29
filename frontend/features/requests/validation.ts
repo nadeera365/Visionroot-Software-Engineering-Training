@@ -24,7 +24,7 @@ export function validateRequest(values: FormValues): FormErrors {
         errors.category = "Please select a valid category.";   
     }
 
-    if (!["Low", "Medium", "High"].includes(values.priority)) {
+    if (!["LOW", "MEDIUM", "HIGH"].includes(values.priority)) {
         errors.priority = "Please select a valid priority.";   
     }
 
