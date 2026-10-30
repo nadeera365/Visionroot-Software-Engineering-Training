@@ -228,4 +228,13 @@ All API errors should use this structure:
 - **Repository/data-access layer:** read and write PostgreSQL records.
 - **Database:** enforce primary-key, required-field, enum-like value, and length constraints as a final data-integrity safeguard.
 
-This contract describes the MVP agreed for Day 01. Login, roles, comments, notifications, attachments, keyword search, pagination, and staff assignment are intentionally excluded for now.
+## 11. Implementation status (Day 05)
+
+- Implemented: GET /api/health, POST /api/requests, GET /api/requests (with ?status=) and GET /api/requests/:id.
+- Not implemented yet: PATCH /api/requests/:id/status (planned for Day 07).
+- Data is stored in memory for now and is lost when the server restarts. PostgreSQL is added on Day 06.
+- The health check returns {"status":"ok","database":"not connected yet"} until the database is connected on Day 06. The 503 case is not implemented yet.
+- On create, fields the client must not set (id, status, created_at, updated_at) are ignored, not rejected. The server always sets status to OPEN.
+- Every error response has code, message and details (details is an empty array when there are no field errors).
+- An invalid JSON body returns 400 VALIDATION_ERROR. An unknown route returns 404 NOT_FOUND.
+- Error codes in use: VALIDATION_ERROR (400), NOT_FOUND (404), INTERNAL_ERROR (500).
