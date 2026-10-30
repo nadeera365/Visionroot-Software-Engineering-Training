@@ -1,14 +1,18 @@
 import express from "express";
+import { errorHandler, notFoundHandler } from "./middleware/error-handler";
+import { requestRoutes } from "./modules/requests/routes";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
+
 app.get("/api/health", (_req, res) => {
-  res.status(200).json({
-    status: "ok",
-    message: "Service Request Management API is running.",
-  });
+  res.status(200).json({ status: "ok", database: "not connected yet" });
 });
 
-export default app;
+app.use("/api/requests", requestRoutes);
+
+// These two must stay last
+app.use(notFoundHandler);
+app.use(errorHandler);
