@@ -232,8 +232,8 @@ All API errors should use this structure:
 
 - Implemented: GET /api/health, POST /api/requests, GET /api/requests (with ?status=) and GET /api/requests/:id.
 - Not implemented yet: PATCH /api/requests/:id/status (planned for Day 07).
-- Data is stored in memory for now and is lost when the server restarts. PostgreSQL is added on Day 06.
-- The health check returns {"status":"ok","database":"not connected yet"} until the database is connected on Day 06. The 503 case is not implemented yet.
+- Data is stored in PostgreSQL and is kept after a restart.
+- GET /api/health returns {"status":"ok","database":"connected"}, or 503 SERVICE_UNAVAILABLE when the database is not reachable.
 - On create, fields the client must not set (id, status, created_at, updated_at) are ignored, not rejected. The server always sets status to OPEN.
 - Every error response has code, message and details (details is an empty array when there are no field errors).
 - An invalid JSON body returns 400 VALIDATION_ERROR. An unknown route returns 404 NOT_FOUND.
