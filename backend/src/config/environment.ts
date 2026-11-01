@@ -12,6 +12,8 @@ if (
 
 const nodeEnv = process.env.NODE_ENV ?? "development";
 
+const databaseUrl = process.env.DATABASE_URL;
+
 if (!["development", "production", "test"].includes(nodeEnv)) {
   throw new Error("NODE_ENV must be development, production, or test.");
 }
@@ -19,4 +21,5 @@ if (!["development", "production", "test"].includes(nodeEnv)) {
 export const env = {
   port: portValue,
   nodeEnv,
+  DATABASE_URL: databaseUrl,
 };
