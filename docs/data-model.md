@@ -69,7 +69,7 @@ The status can move forward one step at a time only:
 
 ## 6. Reference SQL
 
-This SQL describes the intended schema; the actual migration can be created during the implementation phase.
+The real migration is backend/src/database/migrations/001_create_requests.sql.
 
 ```sql
 CREATE TABLE requests (

@@ -82,6 +82,18 @@ Built during the VisionRoot trainee software engineer program.
    npx tsc --noEmit
    npm run lint
    npm run build
+
+4. ## Database setup
+
+1. Install PostgreSQL 13 or newer.
+2. Create a database: `CREATE DATABASE service_requests;`
+3. In `backend/`, copy `.env.example` to `.env` and set `DATABASE_URL`, for example
+   `postgresql://USER:PASSWORD@localhost:5432/service_requests`
+4. Create the tables (run it from the `backend` folder): `npm run migrate`
+5. Start the API: `npm run dev`
+
+Migrations are SQL files in `backend/src/database/migrations/`. They run in file name order and each one runs only once.
+To change the schema, add a new numbered file. Do not edit a migration that is already applied.
 ```
 
 ## Scripts
