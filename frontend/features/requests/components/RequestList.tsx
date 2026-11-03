@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { listRequests } from "../requestsService";
 import type { ServiceRequest } from "../types";
 import StatusBadge from "./StatusBadge";
+import Link from "next/link";
 
 export default function RequestList() {
     const [requests, setRequests] = useState<ServiceRequest[]>([]);
@@ -45,7 +46,9 @@ export default function RequestList() {
             {requests.map((request) => (
                 <li key={request.id} className="rounded-lg border border-gray-300 bg-white p-4">
                     <div className="flex items-start justify-between gap-2">
-                        <h2 className="text-lg font-bold">{request.title}</h2>
+                        <h2 className="text-lg font-bold"><Link href={`/requests/${request.id}`} className="hover:underline">
+                            {request.title}
+                        </Link></h2>
                         <StatusBadge status={request.status} />
                     </div>
                     <p className="mt-1 wrap-break-word text-gray-700">{request.description}</p>
