@@ -1,6 +1,7 @@
 import "dotenv/config";
 
 const portValue = Number(process.env.PORT ?? 5000);
+const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
 
 if (
   !Number.isInteger(portValue) ||
@@ -22,4 +23,5 @@ export const env = {
   port: portValue,
   nodeEnv,
   DATABASE_URL: databaseUrl,
+  FRONTEND_ORIGIN: frontendOrigin,
 };

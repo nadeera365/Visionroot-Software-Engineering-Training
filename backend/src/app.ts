@@ -3,8 +3,11 @@ import { errorHandler, notFoundHandler } from "./middleware/error-handler";
 import { requestRoutes } from "./modules/requests/routes";
 import { checkDatabase } from "./database/connection.js";
 import { AppError } from "./errors.js";
+import cors from "cors";
+import { env } from "./config/environment";
 
 export const app = express();
+app.use(cors({ origin: env.FRONTEND_ORIGIN }));
 
 app.use(express.json());
 
