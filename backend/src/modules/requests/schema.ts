@@ -14,3 +14,9 @@ export const listRequestSchema = z.object({
 export const idParamSchema = z.object({
     id: z.string().uuid("Request ID must be a valid UUID"),
 });
+
+export const updateRequestSchema = z.object({
+    status: z.enum(["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"], {
+    error: "Status must be OPEN, IN_PROGRESS, RESOLVED or CLOSED.",
+  }),
+})

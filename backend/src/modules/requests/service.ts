@@ -1,19 +1,43 @@
-import { NotFoundError } from "../../errors";
-import {requestsRepository} from "./repository";
+import { AppError, NotFoundError } from "../../errors";
+import {requestRepository} from "./repository";
 import type {CreateRequestInput, ServiceRequest, Status} from "./types";
 
+const nextStatus: Record<Status, Status | null> = {
+  OPEN: "IN_PROGRESS",
+  IN_PROGRESS: "RESOLVED",
+  RESOLVED: "CLOSED",
+  CLOSED: null,
+};
 export const requestService = {
     createRequest(input: CreateRequestInput): Promise<ServiceRequest> {
-        return requestsRepository.create({...input, status: "OPEN"});
+        return requestRepository.create({...input, status: "OPEN"});
     },
     listRequests(status?: Status): Promise<ServiceRequest[]> {
-        return requestsRepository.findAll(status);
+        return requestRepository.findAll(status);
     },
     async getRequestById(id: string): Promise<ServiceRequest> {
-        const request = await requestsRepository.findById(id);
+        const request = await requestRepository.findById(id);
         if (!request) {
             throw new NotFoundError("Request not found");
         }
         return request;
+    },
+    async updateRequestStatus(id: string, newStatus: Status): Promise<ServiceRequest> {
+        const request = await this.getRequestById(id);
+
+    
+    if (nextStatus[request.status] !== newStatus) {
+      throw new AppError(
+        400,
+        "INVALID_STATUS_TRANSITION",
+        `Cannot change status from ${request.status} to ${newStatus}.`,
+      );
+    }
+
+    const updated = await requestRepository.updateStatus(id, newStatus);
+    if (!updated) {
+      throw new NotFoundError("Request not found.");
+    }
+    return updated;
     }
 }

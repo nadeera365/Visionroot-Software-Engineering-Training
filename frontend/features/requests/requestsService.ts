@@ -1,20 +1,28 @@
 import { apiRequest } from "@/services/apiClient";
-import { mockCreateRequest, mockListRequests } from "./mockRequests";
-import type { NewRequestInput, ServiceRequest } from "./types";
-
-const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
+import type { NewRequestInput, ServiceRequest, Status } from "./types";
 
 export async function listRequests(): Promise<ServiceRequest[]> {
-    if (USE_MOCK_API) return mockListRequests();
-    const result = await apiRequest<{ data: ServiceRequest[] }>("/requests");
-    return result.data;
+  const result = await apiRequest<{ data: ServiceRequest[] }>("/requests");
+  return result.data;
+}
+
+export async function getRequest(id: string): Promise<ServiceRequest> {
+  const result = await apiRequest<{ data: ServiceRequest }>(`/requests/${id}`);
+  return result.data;
 }
 
 export async function createRequest(input: NewRequestInput): Promise<ServiceRequest> {
-    if (USE_MOCK_API) return mockCreateRequest(input);
-    const result = await apiRequest<{ data: ServiceRequest }>("/requests", {
-        method: "POST",
-        body: JSON.stringify(input),
-    });
-    return result.data;
+  const result = await apiRequest<{ data: ServiceRequest }>("/requests", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+  return result.data;
+}
+
+export async function updateRequestStatus(id: string, status: Status): Promise<ServiceRequest> {
+  const result = await apiRequest<{ data: ServiceRequest }>(`/requests/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+  return result.data;
 }
