@@ -105,10 +105,10 @@ Evidence includes:
 
 ## Pull request
 
-To be updated after creating the pull request.
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/7
 
 ## Commit hash
-
+19fd61c
 
 ## Blockers / questions for supervisor
 
