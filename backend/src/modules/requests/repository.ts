@@ -37,4 +37,15 @@ export const requestRepository = {
     const result = await pool.query<RequestRow>("SELECT * FROM requests WHERE id = $1", [id]);
     return result.rows[0] ? toServiceRequest(result.rows[0]) : undefined;
   },
+
+  async updateStatus(id: string, status: Status): Promise<ServiceRequest | undefined> {
+    const result = await pool.query<RequestRow>(
+      `UPDATE requests
+       SET status = $1, updated_at = now()
+       WHERE id = $2
+       RETURNING *`,
+      [status, id],
+    );
+    return result.rows[0] ? toServiceRequest(result.rows[0]) : undefined;
+  },
 };
