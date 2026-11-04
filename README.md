@@ -124,6 +124,27 @@ To change the schema, add a new numbered file. Do not edit a migration that is a
 - Use small, clear commit messages (`docs: ...`, `chore: ...`, `feat: ...`).
 - Open a pull request, describe what changed and how it was tested, then merge it after review.
 
+## Testing
+
+Run these in the `backend` folder:
+
+| Command | What it does |
+|---|---|
+| `npm test` | Unit tests and API integration tests. No database needed (the database parts are replaced by fakes) |
+| `npm run lint` | ESLint |
+| `npm run format:check` | Prettier check. `npm run format` fixes the formatting |
+| `npm run typecheck` | TypeScript type check |
+| `npm run test:workflow` | End-to-end check of create, list, details and status update. Needs the running backend and database |
+
+Latest results (Day 08):
+
+- `npm test`: 2 test files, 45 tests passed (20 unit, 25 integration)
+- `npm run lint`: no problems
+- `npm run format:check`: all files formatted
+- `npm run typecheck`: no errors
+
+Evidence: `evidence/Day-08/`
+
 ## Documentation
 
 - [Requirements](docs/requirements.md)

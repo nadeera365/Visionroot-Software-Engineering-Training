@@ -3,11 +3,7 @@ import "dotenv/config";
 const portValue = Number(process.env.PORT ?? 5000);
 const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
 
-if (
-  !Number.isInteger(portValue) ||
-  portValue < 1 ||
-  portValue > 65535
-) {
+if (!Number.isInteger(portValue) || portValue < 1 || portValue > 65535) {
   throw new Error("PORT must be a valid port number.");
 }
 

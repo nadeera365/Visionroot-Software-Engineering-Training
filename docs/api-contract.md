@@ -233,7 +233,7 @@ All API errors should use this structure:
 - Implemented: GET /api/health, POST /api/requests, GET /api/requests (with ?status=) and GET /api/requests/:id.
 - PATCH /api/requests/:id/status is implemented (Day 07). Only the next step is allowed. Other changes return 400 INVALID_STATUS_TRANSITION.
 - CORS: only the origin in FRONTEND_ORIGIN (default http://localhost:3000) is allowed to call the API from a browser.
-- Error codes in use: VALIDATION_ERROR (400), INVALID_STATUS_TRANSITION (400), NOT_FOUND (404), SERVICE_UNAVAILABLE (503), INTERNAL_ERROR (500).
+- Error codes in use: VALIDATION_ERROR (400), INVALID_STATUS_TRANSITION (400), BAD_REQUEST (400), NOT_FOUND (404), PAYLOAD_TOO_LARGE (413), INTERNAL_ERROR (500), SERVICE_UNAVAILABLE (503).
 - Data is stored in PostgreSQL and is kept after a restart.
 - GET /api/health returns {"status":"ok","database":"connected"}, or 503 SERVICE_UNAVAILABLE when the database is not reachable.
 - On create, fields the client must not set (id, status, created_at, updated_at) are ignored, not rejected. The server always sets status to OPEN.

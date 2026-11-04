@@ -15,8 +15,15 @@ app.get("/api/health", async (_req, res) => {
   try {
     await checkDatabase();
   } catch (error) {
-    console.error("Health check failed:", error instanceof Error ? error.message : error);
-    throw new AppError(503, "SERVICE_UNAVAILABLE", "Database is not reachable.");
+    console.error(
+      "Health check failed:",
+      error instanceof Error ? error.message : error,
+    );
+    throw new AppError(
+      503,
+      "SERVICE_UNAVAILABLE",
+      "Database is not reachable.",
+    );
   }
   res.status(200).json({ status: "ok", database: "connected" });
 });
