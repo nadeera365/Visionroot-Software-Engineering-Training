@@ -92,11 +92,11 @@ Files and test outputs saved in `evidence/Day-08/`:
 `feat/day-08-tests`
 
 ## Pull request
-
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/9
 
 
 ## Commit hash
-
+247bc35
 
 
 ## End-of-day review / Questions for supervisor
