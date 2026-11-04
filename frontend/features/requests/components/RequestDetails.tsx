@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Button from "@/components/Button";
 import { getRequest, updateRequestStatus } from "../requestsService";
 import { getNextStatus, statusLabels } from "../statusFlow";
 import type { ServiceRequest } from "../types";
+import PriorityTag from "./PriorityDetails";
+import { DetailsSkeleton } from "./Skeletons";
 import StatusBadge from "./StatusBadge";
+import StatusStepper from "./StatusStepper";
 
 export default function RequestDetails({ id }: { id: string }) {
   const [request, setRequest] = useState<ServiceRequest | null>(null);
@@ -44,14 +48,14 @@ export default function RequestDetails({ id }: { id: string }) {
   }
 
   if (loading) {
-    return <p className="rounded-md border border-gray-300 bg-white p-4">Loading request...</p>;
+    return <DetailsSkeleton />;
   }
 
   if (loadError || !request) {
     return (
-      <div role="alert" className="rounded-md border border-red-600 bg-white p-4 text-red-700">
-        <p>{loadError || "Request not found."}</p>
-        <Link href="/requests" className="mt-2 inline-block underline">
+      <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-5 text-rose-800">
+        <p className="font-semibold">{loadError || "Request not found."}</p>
+        <Link href="/requests" className="mt-3 inline-block text-sm font-medium underline">
           Back to all requests
         </Link>
       </div>
@@ -61,46 +65,52 @@ export default function RequestDetails({ id }: { id: string }) {
   const next = getNextStatus(request.status);
 
   return (
-    <div className="grid gap-4">
-      <Link href="/requests" className="text-blue-700 underline">
-        Back to all requests
+    <div className="mx-auto grid w-full max-w-3xl gap-4">
+      <Link href="/requests" className="back-link">
+        &larr; Back to all requests
       </Link>
 
-      <div className="rounded-lg border border-gray-300 bg-white p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h1 className="text-2xl font-bold">{request.title}</h1>
+      <div className="status-card">
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="text-2xl font-bold text-slate-900">{request.title}</h1>
           <StatusBadge status={request.status} />
         </div>
-        <p className="mt-2 wrap-break-word text-gray-700">{request.description}</p>
-        <dl className="mt-4 grid gap-1 text-sm text-gray-600 sm:grid-cols-2">
-          <div>Category: {request.category}</div>
-          <div>Priority: {request.priority}</div>
-          <div>Created: {new Date(request.created_at).toLocaleString()}</div>
-          <div>Updated: {new Date(request.updated_at).toLocaleString()}</div>
-        </dl>
+        <p className="mt-3 break-words text-slate-600">{request.description}</p>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <span className="rounded-md bg-slate-100 px-2 py-0.5 font-medium text-slate-600">
+            {request.category}
+          </span>
+          <PriorityTag priority={request.priority} />
+          <span>Created {new Date(request.created_at).toLocaleString()}</span>
+          <span>&middot; Updated {new Date(request.updated_at).toLocaleString()}</span>
+        </div>
+
+        <div className="status-card-divider">
+          <StatusStepper status={request.status} />
+        </div>
       </div>
 
       {updateMessage && (
-        <p role="status" className="rounded-md border border-green-700 p-3 text-green-800">
+        <p
+          role="status"
+          className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800"
+        >
           {updateMessage}
         </p>
       )}
       {updateError && (
-        <p role="alert" className="rounded-md border border-red-600 p-3 text-red-700">
+        <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">
           {updateError}
         </p>
       )}
 
       {next ? (
-        <button
-          onClick={handleMoveToNext}
-          disabled={updating}
-          className="w-fit rounded-md bg-blue-700 px-4 py-2 text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <Button onClick={handleMoveToNext} loading={updating} className="w-fit">
           {updating ? "Saving..." : `Move to ${statusLabels[next]}`}
-        </button>
+        </Button>
       ) : (
-        <p className="text-gray-600">This request is closed. No more changes are possible.</p>
+        <p className="text-sm text-slate-500">This request is closed. No more changes are possible.</p>
       )}
     </div>
   );

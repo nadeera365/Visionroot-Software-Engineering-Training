@@ -1,19 +1,15 @@
 import type { Status } from "./types";
 
+export const statusOrder: Status[] = ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"];
+
 export const statusLabels: Record<Status, string> = {
   OPEN: "Open",
-  IN_PROGRESS: "In Progress",
+  IN_PROGRESS: "In progress",
   RESOLVED: "Resolved",
-  CLOSED: "Closed"
+  CLOSED: "Closed",
 };
 
-const nextStatus: Record<Status, Status | null> = {
-  OPEN: "IN_PROGRESS",
-  IN_PROGRESS: "RESOLVED",
-  RESOLVED: "CLOSED",
-  CLOSED: null,
-};
 
-export function getNextStatus(currentStatus: Status): Status | null {
-  return nextStatus[currentStatus];
+export function getNextStatus(status: Status): Status | null {
+  return statusOrder[statusOrder.indexOf(status) + 1] ?? null;
 }
