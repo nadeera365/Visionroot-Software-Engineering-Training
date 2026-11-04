@@ -7,12 +7,12 @@ interface FormFieldProps {
 
 export default function FormField({ label, htmlFor, error, children }: FormFieldProps) {
     return (
-        <div className="grid gap-1">
-            <label htmlFor={htmlFor} className="font-bold">
+        <div className="grid gap-2">
+            <label htmlFor={htmlFor} className="field-label">
                 {label}
             </label>
             {children}
-            {error && (<p id={`${htmlFor}-error`} role="alert" className="text-sm text-red-600">{error}</p>)}
+            {error && (<p id={`${htmlFor}-error`} role="alert" className="text-sm text-rose-300">{error}</p>)}
         </div>
     );
 }
