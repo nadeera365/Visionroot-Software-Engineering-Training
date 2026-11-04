@@ -8,12 +8,11 @@ export default defineConfig(
   js.configs.recommended,
   tseslint.configs.recommended,
   {
-    files: ["src/**/*.ts"],
+    files: ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.mjs"],
     languageOptions: {
       globals: globals.node,
     },
     rules: {
-      // Express error handlers must have 4 parameters, so allow unused ones that start with _
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },

@@ -3,7 +3,6 @@ import path from "node:path";
 import { pool } from "./connection.js";
 
 async function migrate() {
-  
   await pool.query(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
       name       TEXT PRIMARY KEY,
@@ -12,10 +11,15 @@ async function migrate() {
   `);
 
   const folder = path.join(process.cwd(), "src", "database", "migrations");
-  const files = (await readdir(folder)).filter((file) => file.endsWith(".sql")).sort();
+  const files = (await readdir(folder))
+    .filter((file) => file.endsWith(".sql"))
+    .sort();
 
   for (const file of files) {
-    const applied = await pool.query("SELECT 1 FROM schema_migrations WHERE name = $1", [file]);
+    const applied = await pool.query(
+      "SELECT 1 FROM schema_migrations WHERE name = $1",
+      [file],
+    );
     if (applied.rowCount) {
       console.log(`Skipped (already applied): ${file}`);
       continue;
@@ -24,10 +28,11 @@ async function migrate() {
     const sql = await readFile(path.join(folder, file), "utf8");
     const client = await pool.connect();
     try {
-      
       await client.query("BEGIN");
       await client.query(sql);
-      await client.query("INSERT INTO schema_migrations (name) VALUES ($1)", [file]);
+      await client.query("INSERT INTO schema_migrations (name) VALUES ($1)", [
+        file,
+      ]);
       await client.query("COMMIT");
       console.log(`Applied: ${file}`);
     } catch (error) {
@@ -42,7 +47,10 @@ async function migrate() {
 migrate()
   .then(() => pool.end())
   .catch(async (error) => {
-    console.error("Migration failed:", error instanceof Error ? error.message : error);
+    console.error(
+      "Migration failed:",
+      error instanceof Error ? error.message : error,
+    );
     await pool.end();
     process.exit(1);
   });

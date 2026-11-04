@@ -1,47 +1,36 @@
 import type { Request, Response } from "express";
-import { toValidationError } from "../../errors";
-import { createRequestSchema, idParamSchema, listRequestSchema,updateRequestSchema } from "./schema";
-import { requestService } from "./service";
+import { parseOrThrow } from "../../validation.js";
+import {
+  createRequestSchema,
+  idParamSchema,
+  listRequestSchema,
+  updateRequestSchema,
+} from "./schema.js";
+import { requestService } from "./service.js";
 
-export async function createRequest(req: Request, res: Response){
-    const parsed = createRequestSchema.safeParse(req.body);
-    if (!parsed.success) {
-        throw toValidationError(parsed.error);
-    }
-    const created = await requestService.createRequest(parsed.data);
-    res.status(201).json({data: created});
+// Controllers handle HTTP only: read the request, validate it, call the service, send the response.
+
+export async function createRequest(req: Request, res: Response) {
+  const input = parseOrThrow(createRequestSchema, req.body);
+  const created = await requestService.createRequest(input);
+  res.status(201).json({ data: created });
 }
 
 export async function listRequests(req: Request, res: Response) {
-  const parsed = listRequestSchema.safeParse(req.query);
-  if (!parsed.success) {
-    throw toValidationError(parsed.error);
-  }
-
-  const requests = await requestService.listRequests(parsed.data.status);
+  const { status } = parseOrThrow(listRequestSchema, req.query);
+  const requests = await requestService.listRequests(status);
   res.status(200).json({ data: requests, meta: { count: requests.length } });
 }
 
 export async function getRequest(req: Request, res: Response) {
-  const parsed = idParamSchema.safeParse(req.params);
-  if (!parsed.success) {
-    throw toValidationError(parsed.error);
-  }
-
-  const request = await requestService.getRequestById(parsed.data.id);
+  const { id } = parseOrThrow(idParamSchema, req.params);
+  const request = await requestService.getRequestById(id);
   res.status(200).json({ data: request });
 }
 
 export async function updateRequestStatus(req: Request, res: Response) {
-  const params = idParamSchema.safeParse(req.params);
-  if (!params.success) {
-    throw toValidationError(params.error);
-  }
-  const body = updateRequestSchema.safeParse(req.body);
-  if (!body.success) {
-    throw toValidationError(body.error);
-  }
-
-  const updated = await requestService.updateRequestStatus(params.data.id, body.data.status);
+  const { id } = parseOrThrow(idParamSchema, req.params);
+  const { status } = parseOrThrow(updateRequestSchema, req.body);
+  const updated = await requestService.updateRequestStatus(id, status);
   res.status(200).json({ data: updated });
 }
