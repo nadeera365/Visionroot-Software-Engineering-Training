@@ -1,9 +1,7 @@
 import { Pool } from "pg";
-import "dotenv/config";
-import { env } from "../config/environment";
+import { env } from "../config/environment.js";
 
-const databaseUrl = (env as typeof env & { DATABASE_URL?: string })
-  .DATABASE_URL;
+const databaseUrl = env.databaseUrl;
 
 if (!databaseUrl) {
   throw new Error("DATABASE_URL is not defined in the environment variables.");
