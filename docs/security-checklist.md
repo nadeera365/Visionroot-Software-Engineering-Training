@@ -49,7 +49,7 @@ The frontend also validates the form, but only for usability. The server never t
 | 11 | Request body size limit | Done | Day 08 regression test (413) |
 | 12 | Logs contain no passwords, bodies, queries or headers | Done | Read the log lines of a run |
 | 13 | NEXT_PUBLIC_ variables contain no secrets | Done | Only NEXT_PUBLIC_API_URL exists |
-| 14 | Dependencies checked with npm audit | (write your own result) | `npm audit --omit=dev` in backend and frontend |
+| 14 | Dependencies checked with npm audit | found 0 vulnerabilities | `npm audit --omit=dev` in backend and frontend |
 | 15 | Least privilege database user | Partly | Documented in docs/deployment.md. Local development uses the postgres user |
 | 16 | HTTPS | Not handled by the app | TLS must be provided by the host or a reverse proxy |
 | 17 | Authentication and authorization | Not done | MVP scope (F-01) |
