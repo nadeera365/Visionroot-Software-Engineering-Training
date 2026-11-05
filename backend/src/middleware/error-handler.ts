@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { AppError, NotFoundError } from "../errors.js";
-
+import { log } from "../logger.js";
 // Used when no route matches the URL
 export function notFoundHandler(
   _req: Request,
@@ -64,7 +64,10 @@ export function errorHandler(
   }
 
   // Unexpected error: log it on the server, send a safe message to the client
-  console.error(err);
+  log("error", "Unexpected error occurred", {
+    error: err instanceof Error ? err.message : String(err),
+    stack: err instanceof Error ? err.stack : undefined,
+  });
   res.status(500).json({
     error: {
       code: "INTERNAL_ERROR",

@@ -1,23 +1,22 @@
 import "dotenv/config";
 
-const portValue = Number(process.env.PORT ?? 5000);
-const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
-
-if (!Number.isInteger(portValue) || portValue < 1 || portValue > 65535) {
-  throw new Error("PORT must be a valid port number.");
-}
-
 const nodeEnv = process.env.NODE_ENV ?? "development";
 
-const databaseUrl = process.env.DATABASE_URL;
+// Production requires a database connection string.
+if (nodeEnv === "production" && !process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set in the environment variables.");
+}
 
-if (!["development", "production", "test"].includes(nodeEnv)) {
-  throw new Error("NODE_ENV must be development, production, or test.");
+// Production also requires an explicitly configured frontend origin.
+if (nodeEnv === "production" && !process.env.FRONTEND_ORIGIN) {
+  throw new Error(
+    "FRONTEND_ORIGIN is not set. It is required when NODE_ENV=production.",
+  );
 }
 
 export const env = {
-  port: portValue,
   nodeEnv,
-  DATABASE_URL: databaseUrl,
-  FRONTEND_ORIGIN: frontendOrigin,
+  port: Number(process.env.PORT ?? 4000),
+  databaseUrl: process.env.DATABASE_URL ?? "",
+  frontendOrigin: process.env.FRONTEND_ORIGIN ?? "http://localhost:3000",
 };

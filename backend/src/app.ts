@@ -1,24 +1,32 @@
+import cors from "cors";
 import express from "express";
-import { errorHandler, notFoundHandler } from "./middleware/error-handler";
-import { requestRoutes } from "./modules/requests/routes";
+import helmet from "helmet";
+import { env } from "./config/environment.js";
 import { checkDatabase } from "./database/connection.js";
 import { AppError } from "./errors.js";
-import cors from "cors";
-import { env } from "./config/environment";
+import { log } from "./logger.js";
+import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
+import { requestLogger } from "./middleware/request-logger.js";
+import { requestRoutes } from "./modules/requests/routes.js";
 
 export const app = express();
-app.use(cors({ origin: env.FRONTEND_ORIGIN }));
 
+app.use(helmet());
+
+if (env.nodeEnv !== "test") {
+  app.use(requestLogger);
+}
+
+app.use(cors({ origin: env.frontendOrigin }));
 app.use(express.json());
 
 app.get("/api/health", async (_req, res) => {
   try {
     await checkDatabase();
   } catch (error) {
-    console.error(
-      "Health check failed:",
-      error instanceof Error ? error.message : error,
-    );
+    log("error", "Health check failed", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     throw new AppError(
       503,
       "SERVICE_UNAVAILABLE",
@@ -26,10 +34,6 @@ app.get("/api/health", async (_req, res) => {
     );
   }
   res.status(200).json({ status: "ok", database: "connected" });
-});
-
-app.get("/api/health", (_req, res) => {
-  res.status(200).json({ status: "ok", database: "not connected yet" });
 });
 
 app.use("/api/requests", requestRoutes);
