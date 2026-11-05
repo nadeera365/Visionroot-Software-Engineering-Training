@@ -3,7 +3,6 @@ import "dotenv/config";
 
 const nodeEnv = process.env.NODE_ENV ?? "development";
 
-// In production, FRONTEND_ORIGIN must be explicitly configured.
 if (nodeEnv === "production" && !process.env.FRONTEND_ORIGIN) {
   throw new Error(
     "FRONTEND_ORIGIN is not set. It is required when NODE_ENV=production.",
