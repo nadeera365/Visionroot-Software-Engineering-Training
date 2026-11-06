@@ -173,11 +173,11 @@ change was required to resolve this connection issue.
 `feat/day-10-final-review`
 
 ## Pull request
-
+https://github.com/nadeera365/Visionroot-Software-Engineering-Training/pull/11
 
 
 ## Commit hash / release tag
-
+b7cc87e
 
 
 ## Blockers / questions for supervisor
