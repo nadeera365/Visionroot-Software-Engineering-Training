@@ -43,6 +43,10 @@ A NoSQL database offers flexibility but our service request data has a defined s
 - Poor separation of responsibilities could cause the layers to become mixed.
 - If the application grows significantly, the architecture may need to be reviewed.
 
-## Review Trigger
 
-We will review this decision if the system grows significantly, requires separate development teams or needs different parts of the backend to scale independently.
+## Outcome after implementation (Day 10)
+
+- The layered backend worked well. The service rules could be tested with a fake repository, and no test needed a database.
+- A separate Express backend means the frontend and the API have different origins, so CORS had to be configured. This was the integration bug on Day 07. Next.js API routes would not have needed CORS.
+- One deployable backend kept the clean checkout simple (npm ci, build, migrate, start).
+- The review trigger has not been reached.

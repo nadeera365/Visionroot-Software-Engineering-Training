@@ -1,157 +1,92 @@
-# Visionroot-Software-Engineering-Training# Service Request Management System
+# Service Request Management System
 
-A small internal web app where users submit and track service requests.
-Built during the VisionRoot trainee software engineer program.
+A small internal web app where users submit service requests and track them from open to closed.
+Built as the VisionRoot trainee software engineer training project.
 
-## Repository
+Version: v0.1.0 (MVP). This is a training project. It is not approved for production use (see "Known limitations").
 
-- Repository URL: https://github.com/nadeera365/Visionroot-Software-Engineering-Training
-- Default branch: `main`
+## What it does
+
+- Create a request (title, description, category, priority)
+- List requests and filter by status
+- View the details of a request
+- Move a request through OPEN, IN_PROGRESS, RESOLVED and CLOSED (only the next step is allowed)
+- Data is stored in PostgreSQL
 
 ## Tech stack
 
-- Frontend: Next.js
-- Backend: Express.js with TypeScript
-- Database: PostgreSQL
+Next.js (frontend), Express.js with TypeScript (backend), PostgreSQL (database).
 
-## Prerequisites
+## Architecture
 
-- Node.js 20 or newer
-- npm
-- Git
-- PostgreSQL (needed from the database step onwards)
+![Architecture diagram](docs/architecture.drawio)
+
+A request flows like this: UI, controller (validates the input), service (business rules), repository (SQL), PostgreSQL.
+
+| Layer | Responsibility |
+|---|---|
+| Frontend | Screens, form validation for usability, loading and error states, calls the API through one API client |
+| Controller | HTTP only: reads the request, validates it, sends the status code and JSON |
+| Service | Business rules, for example the status workflow |
+| Repository | SQL only (parameterized queries) |
+| Database | Stores the data, constraints and indexes protect it |
+
+Why it is built this way: see `docs/decisions/ADR-001-architecture.md` (modular monolith with a layered backend) and `docs/decisions/ADR-002-database-access.md` (PostgreSQL with SQL migrations, no ORM).
 
 ## Getting started
 
-1. Clone the repository
+Full steps for a clean machine: `docs/deployment.md`.
 
-   ```
-   git clone https://github.com/nadeera365/Visionroot-Software-Engineering-Training.git
-   cd Visionroot-Software-Engineering-Training
-   ```
+Short version for development:
 
-2. Run the backend
+1. Create a PostgreSQL database called `service_requests`.
+2. Backend: `cd backend`, copy `.env.example` to `.env` and fill in the values, then `npm install`, `npm run migrate`, `npm run dev`.
+3. Frontend: `cd frontend`, copy `.env.example` to `.env.local`, then `npm install`, `npm run dev`.
+4. Open http://localhost:3000
 
-   ```
-   cd backend
-   npm install
-   cp .env.example .env
-   npm run dev
-   ```
+Never commit `.env` files or share passwords in chat.
 
-   The backend should print `Backend running on port 4000`.
+## Configuration
 
-3. ## Frontend Setup
-
-   ### Prerequisites
-   - Node.js
-   - npm
-   
-   ### Install dependencies
-   
-   ```bash
-   cd frontend
-   npm install
-   ```
-   
-   ### Configure environment variables
-   
-   Create a local `.env.local` file using `.env.example` as a reference.
-   
-   On Windows PowerShell:
-   
-   ```powershell
-   Copy-Item .env.example .env.local
-   ```
-   
-   Make sure `NEXT_PUBLIC_API_URL` points to the correct local API URL. Set `NEXT_PUBLIC_USE_MOCK=true` if you want to use mock request data.
-   
-   Do not commit `.env.local` or real credentials.
-   
-   ### Run the frontend
-   
-   ```bash
-   npm run dev
-   ```
-   
-   Open `http://localhost:3000` in your browser.
-   
-   ### Run checks
-   
-   ```bash
-   npx tsc --noEmit
-   npm run lint
-   npm run build
-
-4. ## Database setup
-
-1. Install PostgreSQL 13 or newer.
-2. Create a database: `CREATE DATABASE service_requests;`
-3. In `backend/`, copy `.env.example` to `.env` and set `DATABASE_URL`, for example
-   `postgresql://USER:PASSWORD@localhost:5432/service_requests`
-4. Create the tables (run it from the `backend` folder): `npm run migrate`
-5. Start the API: `npm run dev`
-
-Migrations are SQL files in `backend/src/database/migrations/`. They run in file name order and each one runs only once.
-To change the schema, add a new numbered file. Do not edit a migration that is already applied.
-```
-
-## Scripts
-
-| Folder | Command | Purpose |
+| Folder | Variable | Notes |
 |---|---|---|
-| backend | `npm run dev` | Start in development mode |
-| backend | `npm run build` | Compile TypeScript |
-| backend | `npm start` | Run the compiled build |
-| backend | `npm run typecheck` | Check types only |
-| backend | `npm run lint` | Run ESLint |
-| backend | `npm run format` | Format code with Prettier |
-| frontend | `npm run dev` | Start in development mode |
-| frontend | `npm run build` | Production build |
-| frontend | `npm run lint` | Run ESLint |
-
-## Folder structure
-
-- `backend/`: Express.js API (TypeScript)
-- `frontend/`: Next.js app
-- `docs/`: requirements, architecture, data model, API contract, decisions
-- `evidence/`: daily logs and evidence, one folder per day (`Day-01`, `Day-02`, ...)
-
-## Git workflow
-
-- Do not commit directly to `main`.
-- Create a feature branch for each task (for example `chore/day-03-environment-setup`).
-- Use small, clear commit messages (`docs: ...`, `chore: ...`, `feat: ...`).
-- Open a pull request, describe what changed and how it was tested, then merge it after review.
+| backend | NODE_ENV, PORT, DATABASE_URL, FRONTEND_ORIGIN | FRONTEND_ORIGIN is required in production |
+| frontend | NEXT_PUBLIC_API_URL | Public. Fixed when the frontend is built |
 
 ## Testing
 
-Run these in the `backend` folder:
+Run in `backend`: `npm test`, `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm run test:workflow` (needs the running backend).
+Run in `frontend`: `npm run lint`, `npm run build`.
+Final results: `evidence/Day-10/test-results.md`.
 
-| Command | What it does |
-|---|---|
-| `npm test` | Unit tests and API integration tests. No database needed (the database parts are replaced by fakes) |
-| `npm run lint` | ESLint |
-| `npm run format:check` | Prettier check. `npm run format` fixes the formatting |
-| `npm run typecheck` | TypeScript type check |
-| `npm run test:workflow` | End-to-end check of create, list, details and status update. Needs the running backend and database |
+## API
 
-Latest results (Day 08):
+| Method | Path | Purpose |
+|---|---|---|
+| GET | /api/health | App and database health |
+| POST | /api/requests | Create a request |
+| GET | /api/requests | List requests (optional ?status=) |
+| GET | /api/requests/:id | Request details |
+| PATCH | /api/requests/:id/status | Move to the next status |
 
-- `npm test`: 2 test files, 45 tests passed (20 unit, 25 integration)
-- `npm run lint`: no problems
-- `npm run format:check`: all files formatted
-- `npm run typecheck`: no errors
+Details, examples and error codes: `docs/api-contract.md`.
 
-Evidence: `evidence/Day-08/`
+## Project structure
 
-## Documentation
+- `backend/`: Express API, migrations, tests
+- `frontend/`: Next.js app
+- `docs/`: requirements, architecture, data model, API contract, deployment runbook, security checklist, decisions
+- `evidence/`: daily logs and evidence, one folder per day (Day-01 to Day-10)
 
-- [Requirements](docs/requirements.md)
-- [Data model](docs/data-model.md)
-- [API contract](docs/api-contract.md)
-- [ADR-001: Architecture](docs/decisions/ADR-001-architecture.md)
+## Git workflow
 
-## Security
+Feature branch for each task, small commits, pull request, review, merge. No direct commits to `main`.
 
-Never commit `.env` files, passwords, API keys or tokens. Use `.env.example` files with placeholder values only.
+## Known limitations
+
+No login or roles (anyone who can reach the API can change a status), plain HTTP, no rate limiting, no automatic backups.
+Full list: `docs/security-checklist.md`.
+
+## Release
+
+Current version: v0.1.0. Release notes: `docs/release-notes.md`.

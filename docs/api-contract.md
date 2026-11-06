@@ -228,15 +228,16 @@ All API errors should use this structure:
 - **Repository/data-access layer:** read and write PostgreSQL records.
 - **Database:** enforce primary-key, required-field, enum-like value, and length constraints as a final data-integrity safeguard.
 
-## 11. Implementation status (Day 05)
+## 11. Implementation status (final, v0.1.0)
 
-- Implemented: GET /api/health, POST /api/requests, GET /api/requests (with ?status=) and GET /api/requests/:id.
-- PATCH /api/requests/:id/status is implemented (Day 07). Only the next step is allowed. Other changes return 400 INVALID_STATUS_TRANSITION.
-- CORS: only the origin in FRONTEND_ORIGIN (default http://localhost:3000) is allowed to call the API from a browser.
-- Error codes in use: VALIDATION_ERROR (400), INVALID_STATUS_TRANSITION (400), BAD_REQUEST (400), NOT_FOUND (404), PAYLOAD_TOO_LARGE (413), INTERNAL_ERROR (500), SERVICE_UNAVAILABLE (503).
+All endpoints in this contract are implemented: GET /api/health, POST /api/requests, GET /api/requests (with ?status=), GET /api/requests/:id and PATCH /api/requests/:id/status.
+
 - Data is stored in PostgreSQL and is kept after a restart.
-- GET /api/health returns {"status":"ok","database":"connected"}, or 503 SERVICE_UNAVAILABLE when the database is not reachable.
-- On create, fields the client must not set (id, status, created_at, updated_at) are ignored, not rejected. The server always sets status to OPEN.
-- Every error response has code, message and details (details is an empty array when there are no field errors).
-- An invalid JSON body returns 400 VALIDATION_ERROR. An unknown route returns 404 NOT_FOUND.
-- Error codes in use: VALIDATION_ERROR (400), NOT_FOUND (404), INTERNAL_ERROR (500).
+- Health: 200 with {"status":"ok","database":"connected"}, or 503 SERVICE_UNAVAILABLE when the database is not reachable.
+- Create: the server always sets the status to OPEN. Fields the client must not set (id, status, created_at, updated_at) are ignored, not rejected.
+- Status update: only the next step is allowed (OPEN, IN_PROGRESS, RESOLVED, CLOSED). Any other change returns 400 INVALID_STATUS_TRANSITION.
+- Request body limit: 100 KB. A larger body returns 413 PAYLOAD_TOO_LARGE.
+- CORS: only the origin in FRONTEND_ORIGIN may call the API from a browser.
+- Every error has code, message and details (details is an empty array when there are no field errors).
+- Error codes in use: VALIDATION_ERROR (400), INVALID_STATUS_TRANSITION (400), BAD_REQUEST (400), NOT_FOUND (404), PAYLOAD_TOO_LARGE (413), INTERNAL_ERROR (500), SERVICE_UNAVAILABLE (503).
+- Not in this version: authentication and authorization, pagination, rate limiting.
